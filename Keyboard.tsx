@@ -1,21 +1,28 @@
 import { StyleSheet, Text, View, Pressable, Alert } from "react-native"
 import React, { Dispatch } from "react"
 import { Feather } from "@expo/vector-icons"
+import dictionary from "./dictionary.json"
 
 const Keyboard = ({
   currentRound,
   currentGuess,
   guesses,
+  boardColors,
+  secretWord,
   setCurrentGuess,
   setGuesses,
   setCurrentRound,
+  setBoardColors,
 }: {
   currentRound: number
   currentGuess: string
   guesses: string[]
+  boardColors: string[][]
+  secretWord: string
   setCurrentGuess: Dispatch<React.SetStateAction<string>>
   setGuesses: Dispatch<React.SetStateAction<string[]>>
   setCurrentRound: Dispatch<React.SetStateAction<number>>
+  setBoardColors: Dispatch<React.SetStateAction<string[][]>>
 }) => {
   const firstRow = ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"]
   const secondRow = ["A", "S", "D", "F", "G", "H", "J", "K", "L"]
@@ -61,9 +68,12 @@ const Keyboard = ({
               currentRound,
               currentGuess,
               guesses,
+              boardColors,
+              secretWord,
               setCurrentGuess,
               setGuesses,
-              setCurrentRound
+              setCurrentRound,
+              setBoardColors
             )
           }
         >
@@ -154,14 +164,29 @@ const handleEnter = (
   currentRound: number,
   currentGuess: string,
   guesses: string[],
+  boardColors: string[][],
+  secretWord: string,
   setCurrentGuess: Dispatch<React.SetStateAction<string>>,
   setGuesses: Dispatch<React.SetStateAction<string[]>>,
-  setCurrentRound: Dispatch<React.SetStateAction<number>>
+  setCurrentRound: Dispatch<React.SetStateAction<number>>,
+  setBoardColors: Dispatch<React.SetStateAction<string[][]>>
 ) => {
   if (currentGuess.split("").length !== 5) {
-    Alert.alert("Warning", "Words need to be exactly five letters long!", [
+    Alert.alert("Warning", "Words need to be exactly five letters long.", [
       { text: "Ok" },
     ])
+  } else if (!dictionary.includes(currentGuess.toLowerCase())) {
+    Alert.alert(
+      "Warning",
+      `Sorry, "${currentGuess}" is not included in the english dictionary.`,
+      [{ text: "Ok" }]
+    )
+  } else if (currentGuess.toLocaleLowerCase() === secretWord) {
+    Alert.alert(
+      "Congratiolations!",
+      `Your guess was correct! The secret word is "${secretWord.toUpperCase()}"`,
+      [{ text: "Start New Game" }]
+    )
   } else {
     setGuesses(
       guesses.map((guess, index) => {
@@ -172,9 +197,33 @@ const handleEnter = (
         }
       })
     )
+    setBoardColors(
+      boardColors.map((row, index) => {
+        if (index === currentRound)
+          return [...evaluateRowColors(currentGuess, secretWord)]
+        return (row = row)
+      })
+    )
     setCurrentRound(currentRound + 1)
     setCurrentGuess("")
   }
+}
+
+const evaluateRowColors = (guess: string, secretWord: string) => {
+  const guessArray = guess.toLowerCase().split("")
+  const secretWordArray = secretWord.toLowerCase().split("")
+  let colors = ["noMatch", "noMatch", "noMatch", "noMatch", "noMatch"]
+  guessArray.forEach((letter, index) => {
+    if (
+      secretWordArray.includes(letter) &&
+      guessArray[index] === secretWordArray[index]
+    ) {
+      colors[index] = "perfectMatch"
+    } else if (secretWordArray.includes(letter)) {
+      colors[index] = "match"
+    }
+  })
+  return colors
 }
 
 export default Keyboard

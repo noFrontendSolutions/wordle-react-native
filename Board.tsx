@@ -1,18 +1,16 @@
 import { View, Text, StyleSheet } from "react-native"
-import React, { Dispatch } from "react"
+import React from "react"
 
 const Board = ({
   currentRound,
   currentGuess,
   guesses,
   boardColors,
-  setBoardColors,
 }: {
   currentRound: number
   currentGuess: string
   guesses: string[]
   boardColors: string[][]
-  setBoardColors: Dispatch<React.SetStateAction<string[][]>>
 }) => {
   const filledFields = currentGuess.split("").length
   const letterPositions = [0, 1, 2, 3, 4]

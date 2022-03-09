@@ -11,6 +11,11 @@ export default function App() {
   const [guesses, setGuesses] = useState(["", "", "", "", "", ""])
   const [currentGuess, setCurrentGuess] = useState("")
   const [secretWord, setSecretWord] = useState(chooseSecretWord(targetWords))
+  const [keyboardColors, setKeyboardColors] = useState<string[][]>([
+    ["", "", "", "", "", "", "", "", "", ""],
+    ["", "", "", "", "", "", "", "", ""],
+    ["", "", "", "", "", "", ""],
+  ])
   const [boardColors, setBoardColors] = useState<string[][]>([
     ["", "", "", "", ""],
     ["", "", "", "", ""],
@@ -19,7 +24,9 @@ export default function App() {
     ["", "", "", "", ""],
     ["", "", "", "", ""],
   ])
+
   console.log(secretWord)
+
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Wordle</Text>
@@ -28,7 +35,6 @@ export default function App() {
         currentGuess={currentGuess}
         guesses={guesses}
         boardColors={boardColors}
-        setBoardColors={setBoardColors}
       />
       <Keyboard
         currentRound={currentRound}
@@ -36,10 +42,12 @@ export default function App() {
         boardColors={boardColors}
         guesses={guesses}
         secretWord={secretWord}
+        keyboardColors={keyboardColors}
         setCurrentGuess={setCurrentGuess}
         setGuesses={setGuesses}
         setCurrentRound={SetCurrentRound}
         setBoardColors={setBoardColors}
+        setKeyboardColors={setKeyboardColors}
       />
       <StatusBar style="auto" />
     </View>

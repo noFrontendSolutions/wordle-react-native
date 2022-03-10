@@ -10,11 +10,15 @@ const Keyboard = ({
   boardColors,
   secretWord,
   keyboardColors,
+  hasWon,
+  hasLost,
   setCurrentGuess,
   setGuesses,
   setCurrentRound,
   setBoardColors,
   setKeyboardColors,
+  setHasWon,
+  setHasLost,
 }: {
   currentRound: number
   currentGuess: string
@@ -22,11 +26,15 @@ const Keyboard = ({
   boardColors: string[][]
   secretWord: string
   keyboardColors: string[][]
+  hasWon: boolean
+  hasLost: boolean
   setCurrentGuess: Dispatch<React.SetStateAction<string>>
   setGuesses: Dispatch<React.SetStateAction<string[]>>
   setCurrentRound: Dispatch<React.SetStateAction<number>>
   setBoardColors: Dispatch<React.SetStateAction<string[][]>>
   setKeyboardColors: Dispatch<React.SetStateAction<string[][]>>
+  setHasWon: Dispatch<React.SetStateAction<boolean>>
+  setHasLost: Dispatch<React.SetStateAction<boolean>>
 }) => {
   const firstRow = ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"]
   const secondRow = ["A", "S", "D", "F", "G", "H", "J", "K", "L"]
@@ -124,7 +132,9 @@ const Keyboard = ({
               setGuesses,
               setCurrentRound,
               setBoardColors,
-              setKeyboardColors
+              setKeyboardColors,
+              setHasWon,
+              setHasLost
             )
           }
         >
@@ -215,7 +225,9 @@ const handleEnter = (
   setGuesses: Dispatch<React.SetStateAction<string[]>>,
   setCurrentRound: Dispatch<React.SetStateAction<number>>,
   setBoardColors: Dispatch<React.SetStateAction<string[][]>>,
-  setKeyboardColors: Dispatch<React.SetStateAction<string[][]>>
+  setKeyboardColors: Dispatch<React.SetStateAction<string[][]>>,
+  setHasWon: Dispatch<React.SetStateAction<boolean>>,
+  setHasLost: Dispatch<React.SetStateAction<boolean>>
 ) => {
   if (currentGuess.split("").length !== 5) {
     Alert.alert("Warning", "Words need to be exactly five letters long.", [
@@ -227,12 +239,16 @@ const handleEnter = (
       `Sorry, "${currentGuess}" is not included in the english dictionary.`,
       [{ text: "Ok" }]
     )
-  } else if (currentGuess.toLocaleLowerCase() === secretWord) {
-    Alert.alert(
-      "Congratiolations!",
-      `Your guess was correct. The secret word is "${secretWord.toUpperCase()}"`,
-      [{ text: "Start New Game" }]
-    )
+  } else if (
+    currentGuess.toLocaleLowerCase() === secretWord &&
+    currentRound <= 5
+  ) {
+    setHasWon(true)
+  } else if (
+    currentGuess.toLocaleLowerCase() !== secretWord &&
+    currentRound > 4
+  ) {
+    setHasLost(true)
   } else {
     setGuesses(
       guesses.map((guess, index) => {
@@ -260,7 +276,6 @@ const handleEnter = (
         keyboardColors
       )
     )
-
     setCurrentRound(currentRound + 1)
     setCurrentGuess("")
   }
@@ -318,10 +333,7 @@ const evaluateKeyboardMatches = (
         ? (secondRowMatches[secondRow.indexOf(letter.toUpperCase())] = "match")
         : (thirdRowMatches[thirdRow.indexOf(letter.toUpperCase())] = "match")
     } else if (!secretWordArray.includes(letter)) {
-      firstRow.includes(letter.toUpperCase()) &&
-      (firstRowMatches[firstRow.indexOf(letter.toUpperCase())] !==
-        "perfectMatch" ||
-        "match")
+      firstRow.includes(letter.toUpperCase())
         ? (firstRowMatches[firstRow.indexOf(letter.toUpperCase())] = "noMatch")
         : secondRow.includes(letter.toUpperCase())
         ? (secondRowMatches[secondRow.indexOf(letter.toUpperCase())] =

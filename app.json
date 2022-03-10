@@ -1,7 +1,9 @@
 {
   "expo": {
-    "name": "wordle",
+    "name": "Wordle Clone",
     "slug": "wordle",
+    "privacy": "public",
+    "description": "A simple, no-animations Wordle clone for iOS (created with React Native).",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

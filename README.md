@@ -1,6 +1,6 @@
 # Wordle-React-Native
 
-is a simple. no-animations Wordle clone made with React Native.
+is a simple. no-animations Wordle clone for iOS (made with React Native).
 
 ---
 

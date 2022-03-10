@@ -111,22 +111,16 @@ const winLostHandler = async (
   if (hasWon) {
     Alert.alert(
       "Congratiolations!",
-      `Your guess was correct. The secret word is "${secretWord.toUpperCase()}"`,
+      `Your guess was correct. The secret word is "${secretWord.toUpperCase()}".`,
       [{ text: "Start New Game" }]
     )
   } else if (hasLost) {
     Alert.alert(
       "Sorry!",
-      `You Lost. The secret word was "${secretWord.toUpperCase()}"`,
+      `You Lost. The secret word was "${secretWord.toUpperCase()}".`,
       [{ text: "Start New Game" }]
     )
   }
-}
-
-const sleep = async (ms: number) => {
-  return new Promise((resolve) => {
-    setTimeout(resolve, ms)
-  })
 }
 
 const chooseSecretWord = (wordArray: string[]): string => {

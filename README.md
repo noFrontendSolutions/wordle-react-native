@@ -1,6 +1,6 @@
 # Wordle-React-Native
 
-is a simple. no-animations Wordle clone for mobile devices, made with React Native, using the Expo development environment.
+is a simple. no-animations Wordle clone for iOS and Android mobile devices. It was made with React Native, using the Expo development environment.
 
 ---
 
